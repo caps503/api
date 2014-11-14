@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<head>
+    <style>
+        #mapa{
+            width: 400px;
+            height: 400px;
+            float:left;
+            background: green;
+        }
+        #infor{
+            width: 400px;
+            height: 400px;
+            float:left;
+        }
+    </style>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js" ></script>
+
+<script>
+    $(document).on("ready", function(){
+        
+        //COORDENADAS INICIALES -13.163622,-72.545926
+        //VARIABLE PARA PUNTO INICIAL
+        var punto = new google.maps.LatLng(13.5,-88.866667);
+        //VARIABLE PARA CONFIGURACION INICIAL
+        var config = {
+            zoom:16,
+            center:punto,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        //VARIABLE MAPA
+        var mapa = new google.maps.Map( $("#mapa")[0], config );
+
+        google.maps.event.addListener(mapa, "click", function(event){
+           //MOSTRAR UNA ALERTA AL HACER CLICK AL MAPA
+           //EL EVENTO CLICK EN EL MAPA OFRECE UN PARAMETRO EVENT
+           //EL CUAL DEVUELVE LAS COORDENADAS DE DONDE SE HIZO CLICK! 
+           //alert(event.latLng);
+           //Coordenadas
+           var coordenadas = event.latLng.toString();
+           
+           //remover los parentesis
+           coordenadas = coordenadas.replace("(", "");
+           coordenadas = coordenadas.replace(")", "");
+           
+           //coordenadas por separado
+           var lista = coordenadas.split(",");
+           
+           //Mostrar las coordenadas por separado
+           //alert("Las coordenada X es"+ lista[0]);
+           //alert("Las coordenada Y es"+ lista[1]);
+           
+           //variable para dirección, punto o coordenada
+           var direccion = new google.maps.LatLng(lista[0], lista[1]);
+           
+           //variable para marcador
+           var marcador = new google.maps.Marker({
+               titulo:prompt("Titulo del marcador?"),
+               position:direccion,//la posición del nuevo marcador
+               map: mapa, //en que mapa se ubicará el marcador
+               animation:google.maps.Animation.DROP,//como aparecerá el marcador
+               draggable:false//no permitir el arrastre del marcador
+           });
+           //agregar evento click al marcador
+           google.maps.event.addListener(marcador, "click", function(){
+              //mostrar una alerta al hacer  click
+              alert(marcador.titulo);
+           });
+           
+           //ubicar el marcador en el mapa
+           marcador.setMap(mapa);
+           
+        });
+
+    });
+</script>
+
+</head>
+
+<body>
+    <div id="mapa">
+        <h2>Mapa</h2>
+    </div>
+    <div id="infor">
+    </div>
+</body>
+</html>
